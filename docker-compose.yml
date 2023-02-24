@@ -27,6 +27,20 @@ services:
     networks:
       - external-network
 
+  # Consumer
+  innosig_iqoption_predict_consumer_1:
+    container_name: innosig_iqoption_predict_consumer_1
+    build:
+      context: .
+      dockerfile: Docker/consumers/Dockerfile
+    image: innosig_iqoption_predict_consumer_1
+    volumes:
+      - ./src:/app
+    restart: always
+    networks:
+      - external-network
+
+
 networks:
   external-network:
     external:
