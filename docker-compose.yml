@@ -1,0 +1,34 @@
+version: '3.1'
+services:
+  # Nginx
+  jurrex_api_webserver:
+    image: nginx:alpine
+    container_name: jurrex_api_webserver
+    volumes:
+      - ./nginx/conf.d/:/etc/nginx/conf.d/
+      - ./nginx/certs/:/etc/nginx/certs
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - internal-network
+
+  # Flask server
+  jurrex_eve_api:
+    container_name: jurrex_eve_api
+    build:
+      context: .
+      dockerfile: Docker/api/Dockerfile
+    image: jurrex_eve_api
+    volumes:
+      - ./src:/app
+    environment:
+      - PORT=7777
+    restart: always
+    networks:
+      - internal-network
+
+networks:
+  internal-network:
+    driver: bridge
