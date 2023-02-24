@@ -18,7 +18,7 @@ class NeuralProphetAlgorithm(BaseProphetAlgorithm):
                 "algorithm": self.__class__.__name__.lower(),
                 "market": self.symbol,
                 "interval": self.interval,
-                "date": datetime.datetime.strptime(slice_row["ds"], "%Y-%m-%dT%H:%M:%SZ"),
+                "date": datetime.datetime.strptime(slice_row["ds"], "%Y-%m-%dT%H:%M:%S.%f"),
                 "price": slice_row["yhat1"]
             }
             NeuralProphetAlgorithm.store_result(result)

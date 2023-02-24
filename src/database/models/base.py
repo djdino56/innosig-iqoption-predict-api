@@ -250,7 +250,7 @@ class Field:
     def try_cast(self, value):
         try:
             if type(value) == str and self.obj_type == datetime:
-                return datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%fZ")
+                return datetime.strptime(value, "%Y-%m-%dT%H:%M:%S.%f")
             else:
                 return self.obj_type(value)
         except Exception:
