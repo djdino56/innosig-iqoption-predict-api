@@ -11,4 +11,4 @@ COPY src /app
 
 ENV PYTHONPATH "${PYTHONPATH}:/app"
 
-CMD [ "python", "-u", "filegen_consumer.py" ]
+CMD [ "python", "-u", "queues/model_request.py" ]
