@@ -36,13 +36,14 @@ def execute_single_market(symbol, interval):
 
 
 def main():
-    # result = ModelResult(**{
-    #     "date": datetime.datetime.now(),
-    #     "market": "EURUSD",
-    #     "interval": "1m",
-    #     "algorithm": "prophetalogirthm",
-    #     "price": "1.19455546656",
-    # })
+    _result_dict = {
+        "date": "2023-02-24T21:30:48.180",
+        "market": "EURUSD",
+        "interval": "1m",
+        "algorithm": "prophetalogirthm",
+        "price": "1.19455546656",
+    }
+    # result = ModelResult(**_result_dict)
     # result._id = '63f8cd35abfd85804eb70f69'
     # result.save()
     # found, _result = ModelResult.find("63f8cd35abfd85804eb70f69")

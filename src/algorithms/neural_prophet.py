@@ -5,6 +5,8 @@ from algorithms.base.baseProphet import BaseProphetAlgorithm
 from pathlib import Path
 from neuralprophet import NeuralProphet, save, load
 
+from database.models.model_result import ModelResult
+
 
 class NeuralProphetAlgorithm(BaseProphetAlgorithm):
 
@@ -19,6 +21,7 @@ class NeuralProphetAlgorithm(BaseProphetAlgorithm):
                 "date": datetime.datetime.strptime(slice_row["ds"], "%Y-%m-%dT%H:%M:%SZ"),
                 "price": slice_row["yhat1"]
             }
+            NeuralProphetAlgorithm.store_result(result)
             self.logger.info(result)
             results.append(result)
         return results

@@ -4,6 +4,7 @@ import seaborn as sbn
 import mplfinance as mpf
 import matplotlib.pyplot as plt
 from algorithms.base.base import BaseAlgorithm
+from database.models.model_result import ModelResult
 
 # We import the warnings library to stop warnings
 # from showing up as they do not provide added insights
@@ -23,8 +24,15 @@ class BaseProphetAlgorithm(BaseAlgorithm):
     def store_forecast(self, periods):
         pass
 
-    def store_result(self, result: dict):
-        pass
+    @classmethod
+    def store_result(cls, result: dict):
+        found_duplicated_price, duplicated_model_price = ModelResult.check_if_duplicated_by_price(result)
+        if not found_duplicated_price:
+            found_duplicated, duplicated_model = ModelResult.check_if_duplicated(result)
+            _model_result = ModelResult(**result)
+            if found_duplicated:
+                _model_result._id = duplicated_model.id
+            _model_result.save()
 
     def rename_model_columns(self, date_column="from_string", target_column="Close"):
         new_names = {

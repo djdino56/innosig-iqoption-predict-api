@@ -1,8 +1,8 @@
-from datetime import datetime
 
 from bson import ObjectId
 
 import settings
+from datetime import datetime
 from database.models.base import BaseModel, Field
 from utils.current_date_time import add_timestamps
 
@@ -26,29 +26,43 @@ class ModelResult(BaseModel):
         else:
             super().__init__(**kwargs)
 
+    @classmethod
+    def return_model(cls, _result):
+        _obj = _result['data'][-1]['content']
+        _obj["_id"] = _result["_id"]
+        return cls.dict_to_obj(_obj)
+
     def reload(self):
         if self.id:
             if not hasattr(self, '_dict') or self._dict is None:
                 self._dict = {}
             self._dict.update(
-                self._client[settings.MONGO_DBNAME][self._collection].find_one(
+                self.return_model(self._client[settings.MONGO_DBNAME][self._collection].find_one(
                     {"_id": ObjectId(self.id)}, {"data": {"$slice": -1}}
-                )['data'][-1]['content']
+                ))
             )
 
     def add_version(self, version: dict):
         result = ModelResult(**version)
         result._id = self.id
-        result.save()
+        return result.save()
 
-    @classmethod
-    def find_by_vid(cls, version_id: int):
-        _result = cls._client[settings.MONGO_DBNAME][cls._collection].find(
-            {"_id": ObjectId(cls.id)},
+    def remove_version(self, version_id: int):
+        _result = self._client[settings.MONGO_DBNAME][self._collection].update_one(
+            {"_id": ObjectId(self.id)},
+            {"$pull": {"data": {"vid": version_id}}}
+        )
+        if _result['updatedExisting'] and _result['nModified'] == 1:
+            return True, self.id
+        return False, None
+
+    def find_by_vid(self, version_id: int):
+        _result = self._client[settings.MONGO_DBNAME][self._collection].find(
+            {"_id": ObjectId(self.id)},
             {"data": {"$elemMatch": {"vid": version_id}}}
         )
         if _result is not None:
-            return True, cls.dict_to_obj(_result['data'][-1]['content'])
+            return True, self.return_model(_result)
         return False, None
 
     @classmethod
@@ -58,7 +72,38 @@ class ModelResult(BaseModel):
             {"data": {"$slice": -1}}
         )
         if _result is not None:
-            return True, cls.dict_to_obj(_result['data'][-1]['content'])
+            return True, cls.return_model(_result)
+        return False, None
+
+    @classmethod
+    def check_if_duplicated(cls, result: dict):
+        _result = cls._client[settings.MONGO_DBNAME][cls._collection].find_one(
+            {
+                "data.content.date": datetime.strptime(result["date"], "%Y-%m-%dT%H:%M:%S.%f"),
+                "data.content.market": result["market"],
+                "data.content.algorithm": result["algorithm"],
+                "data.content.interval": result["interval"]
+            },
+            {"data": {"$slice": -1}}
+        )
+        if _result is not None:
+            return True, cls.return_model(_result)
+        return False, None
+
+    @classmethod
+    def check_if_duplicated_by_price(cls, result: dict):
+        _result = cls._client[settings.MONGO_DBNAME][cls._collection].find_one(
+            {
+                "data.content.date": datetime.strptime(result["date"], "%Y-%m-%dT%H:%M:%S.%f"),
+                "data.content.market": result["market"],
+                "data.content.algorithm": result["algorithm"],
+                "data.content.interval": result["interval"],
+                "data.content.price": result["price"]
+            },
+            {"data": {"$slice": -1}}
+        )
+        if _result is not None:
+            return True, cls.return_model(_result)
         return False, None
 
     def save(self):

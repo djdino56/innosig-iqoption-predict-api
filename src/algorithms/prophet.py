@@ -3,6 +3,8 @@ import json
 import numpy as np
 from pathlib import Path
 import datetime as datetime
+
+from database.models.model_result import ModelResult
 from prophet import Prophet
 from prophet.serialize import model_to_json, model_from_json
 from algorithms.base.baseProphet import BaseProphetAlgorithm
@@ -21,6 +23,7 @@ class ProphetAlgorithm(BaseProphetAlgorithm):
                 "date": datetime.datetime.strptime(slice_row["ds"], "%Y-%m-%dT%H:%M:%S.%f"),
                 "price": slice_row["yhat"]
             }
+            ProphetAlgorithm.store_result(result)
             self.logger.info(result)
             results.append(result)
         return results
