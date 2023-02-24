@@ -77,9 +77,12 @@ class ModelResult(BaseModel):
 
     @classmethod
     def check_if_duplicated(cls, result: dict):
+        convertdate = result["date"]
+        if isinstance(result["date"], str):
+            convertdate = datetime.strptime(result["date"], "%Y-%m-%dT%H:%M:%S.%f")
         _result = cls._client[settings.MONGO_DBNAME][cls._collection].find_one(
             {
-                "data.content.date": datetime.strptime(result["date"], "%Y-%m-%dT%H:%M:%S.%f"),
+                "data.content.date": convertdate,
                 "data.content.market": result["market"],
                 "data.content.algorithm": result["algorithm"],
                 "data.content.interval": result["interval"]
