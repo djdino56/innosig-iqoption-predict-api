@@ -47,15 +47,15 @@ class ProphetAlgorithm(BaseProphetAlgorithm):
         # else:
         # self.logger.info(f'The file {path_to_file} does not exist')
         self.logger.info('Creating model of {}'.format(self.__class__.__name__.lower()))
-        with open(path_to_file, 'w') as fout:
-            m = Prophet(
-                yearly_seasonality=False,
-                daily_seasonality=False,
-                weekly_seasonality=False
-            )
-            m.fit(self.model_dataset)  # TODO: freq unused
-            fout.write(model_to_json(m))  # Save model
-            return m
+        # with open(path_to_file, 'w') as fout:
+        m = Prophet(
+            yearly_seasonality=False,
+            daily_seasonality=False,
+            weekly_seasonality=False
+        )
+        m.fit(self.model_dataset)  # TODO: freq unused
+        # fout.write(model_to_json(m))  # Save model
+        return m
 
     def start(self):
         # Plot the dataset

@@ -37,20 +37,20 @@ class NeuralProphetAlgorithm(BaseProphetAlgorithm):
                                                             self.__class__.__name__.lower(),
                                                             self.symbol.lower(),
                                                             self.interval)
-        path = Path(path_to_file)
-        if path.is_file() and not new_model:
-            self.logger.info(f'The file {path_to_file} exists')
-            return load(path_to_file)
-        else:
-            self.logger.info(f'The file {path_to_file} does not exist')
-            m = NeuralProphet(
-                yearly_seasonality=False,
-                daily_seasonality=False,
-                weekly_seasonality=False
-            )
-            m.fit(self.model_dataset, freq=freq)
-            save(m, path_to_file)
-            return load(path_to_file)
+        # path = Path(path_to_file)
+        # if path.is_file() and not new_model:
+        #     self.logger.info(f'The file {path_to_file} exists')
+        #     return load(path_to_file)
+        # else:
+        #     self.logger.info(f'The file {path_to_file} does not exist')
+        m = NeuralProphet(
+            yearly_seasonality=False,
+            daily_seasonality=False,
+            weekly_seasonality=False
+        )
+        m.fit(self.model_dataset, freq=freq)
+        # save(m, path_to_file)
+        return m
 
     def start(self):
         # Plot the dataset
