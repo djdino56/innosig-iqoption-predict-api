@@ -11,4 +11,4 @@ COPY src /app
 
 ENV PYTHONPATH "${PYTHONPATH}:/app"
 
-CMD [ "python", "-u", "app.py" ]
+CMD [ "python", "-u", "scheduler.py" ]

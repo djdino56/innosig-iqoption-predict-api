@@ -37,7 +37,6 @@ ALLOWED_INSTRUMENT_TYPES = {
 # APP SETTINGS #######################
 DEFAULT_TIME_PERIOD = 120
 
-
 # LOGGING SETTINGS #######################
 root = logging.getLogger()
 root.setLevel(logging.INFO)
@@ -125,73 +124,51 @@ accounts = {
         }
     },
 }
-candles = {
+model_results = {
     # 'title' tag used in item links.
-    'item_title': 'candles',
+    'item_title': 'model_results',
     'schema': {
         '_id': {
             'type': 'string',
             'required': True,
         },
-        'market': {
-            'type': 'string',
+        'data': {
+            'type': 'list',
             'required': True,
-        },
-        'interval': {
-            'type': 'string',
-            'required': True,
-        },
-        'date': {
-            'type': 'float',
-            'required': True,
-        },
-        'trend': {
-            'type': 'float',
-            'required': True,
-        },
-        'yhat_lower': {
-            'type': 'float',
-            'required': True,
-        },
-        'yhat_upper': {
-            'type': 'float',
-            'required': True,
-        },
-        'trend_lower': {
-            'type': 'float',
-            'required': True,
-        },
-        'trend_upper': {
-            'type': 'float',
-            'required': True,
-        },
-        'multiplicative_terms': {
-            'type': 'float',
-            'required': True,
-        },
-        'multiplicative_terms_lower': {
-            'type': 'float',
-            'required': True,
-        },
-        'multiplicative_terms_upper': {
-            'type': 'float',
-            'required': True,
-        },
-        'additive_terms': {
-            'type': 'float',
-            'required': True,
-        },
-        'additive_terms_lower': {
-            'type': 'float',
-            'required': True,
-        },
-        'additive_terms_upper': {
-            'type': 'float',
-            'required': True,
-        },
-        'yhat': {
-            'type': 'float',
-            'required': True,
+            'schema': {
+                'type': 'dict',
+                'schema': {
+                    'vid': {
+                        'type': 'string',
+                        'required': True
+                    },
+                    'content': {
+                        'type': 'dict',
+                        'schema': {
+                            'market': {
+                                'type': 'string',
+                                'required': True,
+                            },
+                            'interval': {
+                                'type': 'string',
+                                'required': True,
+                            },
+                            'date': {
+                                'type': 'date',
+                                'required': True,
+                            },
+                            'algorithm': {
+                                'type': 'str',
+                                'required': True,
+                            },
+                            'price': {
+                                'type': 'str',
+                                'required': True,
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -219,6 +196,6 @@ markets = {
 # be accessible to the API consumer.
 DOMAIN = {
     "accounts": accounts,
-    "candles": candles,
+    "model_results": model_results,
     "markets": markets,
 }

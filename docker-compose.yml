@@ -1,26 +1,24 @@
 version: '3.1'
 services:
-  # Nginx
-  jurrex_api_webserver:
-    image: nginx:alpine
-    container_name: jurrex_api_webserver
+  innosig_iqoption_predict_scheduler:
+    container_name: innosig_iqoption_predict_scheduler
+    image: innosig_iqoption_predict_scheduler
+    build:
+      context: .
+      dockerfile: Docker/scheduler/Dockerfile
     volumes:
-      - ./nginx/conf.d/:/etc/nginx/conf.d/
-      - ./nginx/certs/:/etc/nginx/certs
+      - ./src:/app
     restart: always
-    ports:
-      - "80:80"
-      - "443:443"
     networks:
-      - internal-network
+      - internal_network
 
   # Flask server
-  jurrex_eve_api:
-    container_name: jurrex_eve_api
+  innosig_iqoption_predict_api:
+    container_name: innosig_iqoption_predict_api
     build:
       context: .
       dockerfile: Docker/api/Dockerfile
-    image: jurrex_eve_api
+    image: innosig_iqoption_predict_api
     volumes:
       - ./src:/app
     environment:
