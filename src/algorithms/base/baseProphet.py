@@ -34,7 +34,7 @@ class BaseProphetAlgorithm(BaseAlgorithm):
                 _model_result._id = duplicated_model.id
             _model_result.save()
 
-    def rename_model_columns(self, date_column="from_string", target_column="Close"):
+    def rename_model_columns(self, date_column="close_time_string", target_column="Close"):
         new_names = {
             date_column: "ds",
             target_column: "y",
@@ -53,7 +53,7 @@ class BaseProphetAlgorithm(BaseAlgorithm):
             # Create a new directory because it does not exist
             os.makedirs(path)
         # Plot last 100 rows of our dataset
-        mpf.plot(self.dataset.set_index("from_string").tail(100),
+        mpf.plot(self.dataset.set_index("close_time_string").tail(100),
                  type="candle",
                  style="charles",
                  volume=True,

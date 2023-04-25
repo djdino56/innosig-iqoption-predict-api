@@ -3,9 +3,9 @@ import logging
 
 from algorithms.neural_prophet import NeuralProphetAlgorithm
 from algorithms.prophet import ProphetAlgorithm
-from common.enums import KLINE_INTERVAL_1MINUTE, EUR_USD, CAD_JPY, MODEL_REQUEST_CHANNEL
+from common.enums import KLINE_INTERVAL_1MINUTE, BTC_USDT, MODEL_REQUEST_CHANNEL
 from database.models.base import BaseModel
-from database.models.model_result import ModelResult
+from extractor.binance import BinanceExtractor
 
 from extractor.iqoption import IQOptionExtractor
 
@@ -27,7 +27,8 @@ def set_model_request_in_queue(symbol, interval):
 
 def execute_single_market(symbol, interval):
     logger.debug("== Scheduling model: {} {}".format(symbol, interval))
-    extractor = IQOptionExtractor()
+    # extractor = IQOptionExtractor()
+    extractor = BinanceExtractor()
     dataset = extractor.retrieve(symbol, interval)
     p_algo = ProphetAlgorithm(symbol, interval, dataset)
     p_algo.start()
@@ -36,18 +37,7 @@ def execute_single_market(symbol, interval):
 
 
 def main():
-    _result_dict = {
-        "date": "2023-02-24T21:30:48.180",
-        "market": "EURUSD",
-        "interval": "1m",
-        "algorithm": "prophetalogirthm",
-        "price": "1.19455546656",
-    }
-    # result = ModelResult(**_result_dict)
-    # result._id = '63f8cd35abfd85804eb70f69'
-    # result.save()
-    # found, _result = ModelResult.find("63f8cd35abfd85804eb70f69")
-    symbol = EUR_USD
+    symbol = BTC_USDT
     intervals = [KLINE_INTERVAL_1MINUTE]
 
     print("== START processing models")

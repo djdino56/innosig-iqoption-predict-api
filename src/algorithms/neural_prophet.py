@@ -56,7 +56,7 @@ class NeuralProphetAlgorithm(BaseProphetAlgorithm):
         # Plot the dataset
         self.plot_data()
         # Slice target columns from original dataset
-        self.model_dataset = self.dataset[["from_string", "Close"]]
+        self.model_dataset = self.dataset[["close_time_string", "Close"]]
         # Rename columns for model
         self.rename_model_columns()
         # Get periods and freq

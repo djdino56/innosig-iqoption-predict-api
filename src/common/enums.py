@@ -1,7 +1,6 @@
 from enum import Enum
 
-EUR_USD = 'EURUSD'
-CAD_JPY = 'CADJPY'
+BTC_USDT = 'BTCUSDT'
 
 MODEL_REQUEST_CHANNEL = 'run_model_channel'
 

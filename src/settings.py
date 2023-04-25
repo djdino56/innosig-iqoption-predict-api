@@ -10,7 +10,7 @@ MONGO_PASSWORD = os.environ.get('DB_PASSWORD', '9Aat3ZjF3wuvWkGCzzQNeXRG7GxqT6D2
 # MONGO_HOST = os.environ.get('DB_HOST', 'hspaymentcs0.au4jt.mongodb.net')
 # MONGO_USERNAME = os.environ.get('DB_USERNAME', 'hubble_solution_payment_user')
 # MONGO_PASSWORD = os.environ.get('DB_PASSWORD', '68RF7jlGsKeNJidI')
-MONGO_DBNAME = os.environ.get('DB_NAME', 'innosig-iqoption-predict')
+MONGO_DBNAME = os.environ.get('DB_NAME', 'innopred')
 MONGO_AUTH_SOURCE = "admin"
 
 # MONGO_URI = "mongodb+srv://{username}:{password}@{host}/{dbname}?authSource=admin&retryWrites=true&w=majority".format(
@@ -33,6 +33,10 @@ ALLOWED_INSTRUMENT_TYPES = {
     'EURUSD': 'forex',
     'SPY': 'cfd'
 }
+
+# BINANCE SETTINGS
+BINANCE_API_KEY = 'TvQMppOmnW5wDUGB4KxQlGg37ppeNhW6lSDxLpbcdINai9Tz6wrbzveqjZmmN94l'
+BINANCE_SECRET_KEY = 'lGLMhs0eZFXWoE6hrQhDNDpeAAUm8o1F5UDTg2pdFquN23A1b2Zkxf6HXbmYrcO5'
 
 # APP SETTINGS #######################
 DEFAULT_TIME_PERIOD = 120

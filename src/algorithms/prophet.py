@@ -27,11 +27,6 @@ class ProphetAlgorithm(BaseProphetAlgorithm):
             self.logger.info(result)
             results.append(result)
         return results
-        # from database.models.candle import Candle
-        # found_candle, candle = Candle.find_by_date(slice_row["date"], self.symbol, self.interval)
-        # if not found_candle:
-        #     candle = Candle(**slice_row)
-        #     candle.save()
 
     def create_model(self, freq, new_model=True):
         current_directory = os.getcwd()
@@ -61,7 +56,7 @@ class ProphetAlgorithm(BaseProphetAlgorithm):
         # Plot the dataset
         self.plot_data()
         # Slice target columns from original dataset
-        self.model_dataset = self.dataset[["from_string", "Close"]]
+        self.model_dataset = self.dataset[["close_time_string", "Close"]]
         # Rename columns for model
         self.rename_model_columns()
         # Get periods and freq
