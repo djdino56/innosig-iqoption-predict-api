@@ -9,6 +9,9 @@ eve===2.0.4
 pymongo[srv]==3.11.2
 mongo-queue-service===0.1.8
 dateparser===1.1.7
-python-binance==1.0.17
+python-binance==1.0.15
+eventlet===0.33.3
+python-socketio===5.8.0
+redis===4.5.4
 
 # venv\Scripts\pip install -r .\src/requirements.txt

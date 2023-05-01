@@ -1,47 +1,33 @@
 version: '3.1'
 services:
-  innosig_iqoption_predict_scheduler:
-    container_name: innosig_iqoption_predict_scheduler
-    image: innosig_iqoption_predict_scheduler
-    build:
-      context: .
-      dockerfile: Docker/scheduler/Dockerfile
-    volumes:
-      - ./src:/app
+  # Socket server
+#  innopred_socket:
+#    container_name: innopred_socket
+#    build:
+#      context: .
+#      dockerfile: Docker/socket/Dockerfile
+#    image: innopred_socket
+#    volumes:
+#      - ./src:/app
+#    ports:
+#      - 5000:5000
+#    restart: always
+#    networks:
+#      - internal_network
+
+  innopred_redis:
+    image: redis
+    container_name: innopred_redis
     restart: always
+    entrypoint: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
     networks:
-      - external-network
-
-  # Flask server
-  innosig_iqoption_predict_api:
-    container_name: innosig_iqoption_predict_api
-    build:
-      context: .
-      dockerfile: Docker/api/Dockerfile
-    image: innosig_iqoption_predict_api
+      - internal_network
     volumes:
-      - ./src:/app
-    environment:
-      - PORT=7777
-    restart: always
-    networks:
-      - external-network
+      - ./data/redis_data:/data
 
-  # Consumer
-  innosig_iqoption_predict_consumer_1:
-    container_name: innosig_iqoption_predict_consumer_1
-    build:
-      context: .
-      dockerfile: Docker/consumers/Dockerfile
-    image: innosig_iqoption_predict_consumer_1
-    volumes:
-      - ./src:/app
-    restart: always
-    networks:
-      - external-network
-
-
+#Docker Networks
 networks:
-  external-network:
-    external:
-      name: innosig-backend-backtesting_internal-network
+  internal_network:
+    driver: bridge
