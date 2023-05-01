@@ -12,18 +12,22 @@ from algorithms.base.baseProphet import BaseProphetAlgorithm
 
 class ProphetAlgorithm(BaseProphetAlgorithm):
 
-    def store_forecast(self, periods):
+    def store_forecast(self, periods, mgr=None, store_in_db=False):
         sliced_rows = json.loads(self.forecast.iloc[-periods:].to_json(orient="records", date_format='iso'))
         results = []
         for slice_row in sliced_rows:
             result = {
-                "algorithm": self.__class__.__name__.lower(),
-                "market": self.symbol,
-                "interval": self.interval,
-                "date": datetime.datetime.strptime(slice_row["ds"], "%Y-%m-%dT%H:%M:%S.%f"),
-                "price": slice_row["yhat"]
+                "a": self.__class__.__name__.lower(),
+                "m": self.symbol,
+                "i": self.interval,
+                # "d": datetime.datetime.strptime(slice_row["ds"], "%Y-%m-%dT%H:%M:%S.%f"),
+                "d": slice_row["ds"],
+                "p": slice_row["yhat"]
             }
-            ProphetAlgorithm.store_result(result)
+            if store_in_db:
+                ProphetAlgorithm.store_result(result)
+            elif mgr is not None:
+                mgr.emit('ALGO_UPDATE', data=result)
             self.logger.info(result)
             results.append(result)
         return results
@@ -52,7 +56,7 @@ class ProphetAlgorithm(BaseProphetAlgorithm):
         # fout.write(model_to_json(m))  # Save model
         return m
 
-    def start(self):
+    def start(self, mgr=None):
         # Plot the dataset
         self.plot_data()
         # Slice target columns from original dataset
@@ -71,4 +75,4 @@ class ProphetAlgorithm(BaseProphetAlgorithm):
         self.forecast = self.predict()
         # self.logger.info(self.forecast[['ds', 'yhat1']].tail(periods))
         self.plot_model()
-        self.store_forecast(periods)
+        self.store_forecast(periods, mgr)
